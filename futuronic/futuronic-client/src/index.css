@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+:root {
+  /* Dark theme variables (default) */
+  --primary-color: #f97316; /* orange */
+  --secondary-color: #22c55e; /* green */
+  --accent-color: #ffffff; /* white */
+  --vibrant-color: #f97316; /* orange (for accents) */
+  --neon-color: #22c55e; /* green (for special elements) */
+  --bg-color: #000000; /* black */
+  --surface-color: #1a1a1a; /* dark gray */
+  --text-color: #ffffff; /* white */
+  --text-contrast-color: #cccccc; /* light gray */
+  --logo-primary: #f97316; /* orange for logo */
+  --logo-secondary: #22c55e; /* green for logo */
+}
+
+[data-theme="light"] {
+  /* Light theme variables */
+  --primary-color: #f97316; /* orange */
+  --secondary-color: #22c55e; /* green */
+  --accent-color: #000000; /* black */
+  --vibrant-color: #f97316; /* orange (for accents) */
+  --neon-color: #22c55e; /* green (for special elements) */
+  --bg-color: #ffffff; /* white */
+  --surface-color: #f8fafc; /* very light gray */
+  --text-color: #000000; /* black */
+  --text-contrast-color: #64748b; /* medium gray */
+  --logo-primary: #f97316; /* orange for logo */
+  --logo-secondary: #22c55e; /* green for logo */
+}
+
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slideUp {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  .animate-scaleIn {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .transition-all-custom {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.5); /* orange */
+  }
+
+  .glow-secondary {
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.5); /* green */
+  }
+
+  .glow-vibrant {
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.5); /* orange */
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* black */
+  }
+
+  .glow-neon {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.7); /* green */
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
+}
+
+/* Apply theme colors */
+.bg-primary { background-color: var(--primary-color); }
+.bg-secondary { background-color: var(--secondary-color); }
+.bg-vibrant { background-color: var(--vibrant-color); }
+.bg-accent { background-color: var(--accent-color); }
+.bg-neon { background-color: var(--neon-color); }
+.text-primary { color: var(--primary-color); }
+.text-secondary { color: var(--secondary-color); }
+.text-vibrant { color: var(--vibrant-color); }
+.text-accent { color: var(--accent-color); }
+.text-neon { color: var(--neon-color); }
+.bg-dark { background-color: var(--bg-color); }
+.bg-dark-surface { background-color: var(--surface-color); }
+.text-light { color: var(--text-color); }
+.text-light-contrast { color: var(--text-contrast-color); }
+
+/* Logo specific styles */
+.logo-primary { color: var(--logo-primary); }
+.logo-secondary { color: var(--logo-secondary); }
+
+/* Animated background gradients */
+.animated-bg {
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

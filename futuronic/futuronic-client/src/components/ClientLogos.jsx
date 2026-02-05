@@ -111,7 +111,7 @@ const ClientLogos = () => {
             {/* Navigation Controls */}
             <button
               onClick={goToPrev}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-8 bg-gradient-to-r from-primary to-vibrant text-white p-4 rounded-full shadow-xl hover:shadow-2xl hover:shadow-vibrant/30 transition-all duration-300 z-20 hover:scale-110"
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-8 bg-gradient-to-r from-primary to-vibrant text-[var(--text-color)] p-4 rounded-full shadow-xl hover:shadow-2xl hover:shadow-vibrant/30 transition-all duration-300 z-20 hover:scale-110"
               aria-label="Previous client"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -121,7 +121,7 @@ const ClientLogos = () => {
 
             <button
               onClick={goToNext}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-8 bg-gradient-to-r from-primary to-vibrant text-white p-4 rounded-full shadow-xl hover:shadow-2xl hover:shadow-vibrant/30 transition-all duration-300 z-20 hover:scale-110"
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-8 bg-gradient-to-r from-primary to-vibrant text-[var(--text-color)] p-4 rounded-full shadow-xl hover:shadow-2xl hover:shadow-vibrant/30 transition-all duration-300 z-20 hover:scale-110"
               aria-label="Next client"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -136,11 +136,10 @@ const ClientLogos = () => {
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-4 h-4 rounded-full transition-all duration-300 ${
-                  index === currentIndex
+                className={`w-4 h-4 rounded-full transition-all duration-300 ${index === currentIndex
                     ? 'bg-gradient-to-r from-primary to-vibrant w-10'
-                    : 'bg-gray-600 hover:bg-vibrant'
-                }`}
+                    : 'bg-[var(--surface-color)] hover:bg-vibrant'
+                  }`}
                 aria-label={`Go to client group ${index + 1}`}
               />
             ))}
@@ -174,32 +173,17 @@ const ClientLogos = () => {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentIndex
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
                   ? 'bg-gradient-to-r from-primary to-vibrant w-8'
-                  : 'bg-gray-600 hover:bg-vibrant'
-              }`}
+                  : 'bg-[var(--surface-color)] hover:bg-vibrant'
+                }`}
               aria-label={`Go to client group ${index + 1}`}
             />
           ))}
         </div>
       </div>
-      
+
       {/* Add CSS for animation delays */}
-      <style jsx>{`
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </section>
   );
 };

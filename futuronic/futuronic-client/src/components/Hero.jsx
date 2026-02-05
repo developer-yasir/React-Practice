@@ -1,136 +1,197 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FaRocket, FaArrowRight, FaPlay, FaRobot, FaBrain, FaNetworkWired, FaGlobe, FaBolt } from 'react-icons/fa';
 
 const Hero = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    // Trigger animation after component mounts
-    setIsVisible(true);
-  }, []);
-
   return (
-    <section className="relative bg-gradient-to-br from-[var(--bg-color)] via-[var(--surface-color)] to-[var(--bg-color)] text-[var(--text-color)] h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 z-0">
-        {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[var(--bg-color)] via-[var(--surface-color)] to-[var(--bg-color)]"></div>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--bg-color)] text-[var(--text-color)] pt-20">
+      {/* Dynamic Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Gradient Orbs */}
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[var(--primary-color)]/10 rounded-full blur-[120px]"
+        />
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], opacity: [0.05, 0.15, 0.05] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-[var(--secondary-color)]/10 rounded-full blur-[100px]"
+        />
 
-        {/* Animated grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,[var(--primary-color)_1px,transparent_1px),linear-gradient(to_bottom,[var(--primary-color)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10"></div>
-
-        {/* Floating particles */}
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-vibrant animate-pulse"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              width: `${Math.random() * 10 + 2}px`,
-              height: `${Math.random() * 10 + 2}px`,
-              opacity: Math.random() * 0.5 + 0.1,
-              animationDuration: `${Math.random() * 5 + 3}s`,
-              animationDelay: `${Math.random() * 2}s`
-            }}
-          ></div>
-        ))}
-
-        {/* Floating geometric shapes */}
-        <div className="absolute top-1/4 left-1/4 w-16 h-16 border-2 border-primary/30 rotate-45 animate-pulse"></div>
-        <div className="absolute top-1/3 right-1/3 w-12 h-12 bg-vibrant/10 rounded-full animate-bounce animation-delay-1000"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-8 h-8 bg-accent/10 rotate-45 animate-pulse animation-delay-2000"></div>
-        <div className="absolute top-2/3 right-1/4 w-10 h-10 border-2 border-vibrant/30 rounded-full animate-bounce animation-delay-3000"></div>
-
-        {/* Animated rings */}
-        <div className="absolute top-1/5 left-1/5 w-64 h-64 border border-primary/20 rounded-full animate-spin-slow opacity-20"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 border border-vibrant/20 rounded-full animate-spin-slow animation-delay-5000 opacity-20"></div>
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(var(--accent-color)/0.03_1px,transparent_1px),linear-gradient(90deg,var(--accent-color)/0.03_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,var(--bg-color)_70%,transparent_100%)] opacity-20"></div>
       </div>
 
-      <div className={`relative z-10 text-center max-w-6xl px-4 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-        {/* Main headline */}
-        <div className="mb-8 animate-slideUp">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-6 font-sans">
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-vibrant mb-2 animate-pulse">Unleash the Power of AI</span>
-            <span className="block text-2xl md:text-3xl lg:text-4xl text-[var(--text-contrast-color)] font-normal mt-4">Transforming Industries with Futuronic</span>
+      <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+        {/* Text Content */}
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-left"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-primary/20 bg-primary/5 text-primary text-sm font-semibold mb-6 animate-pulse">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            Futuronic AI 2.0 is Live
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-bold font-display leading-tight mb-6">
+            The Future of <br />
+            <span className="text-gradient hover:text-gradient-vibrant transition-all duration-500 cursor-default">Intelligence</span>
+            <span className="text-primary">.</span>
           </h1>
-        </div>
 
-        {/* Subtitle */}
-        <p className="text-lg md:text-xl text-[var(--text-contrast-color)] mb-12 max-w-3xl mx-auto font-sans animate-slideUp" style={{ animationDelay: '0.2s' }}>
-          Pioneering artificial intelligence solutions and automation tools to redefine industries and empower your future.
-        </p>
+          <p className="text-xl text-[var(--text-contrast-color)] mb-8 max-w-lg leading-relaxed">
+            Revolutionize your workflow with autonomous agents and cognitive computing.
+            We build the AI that builds the future.
+          </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row justify-center gap-6 animate-slideUp" style={{ animationDelay: '0.4s' }}>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              href="#services"
+              className="px-8 py-4 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] rounded-xl font-bold text-[var(--bg-color)] shadow-lg shadow-[var(--primary-color)]/25 flex items-center justify-center gap-3 group"
+            >
+              Start Building <FaRocket className="group-hover:-translate-y-1 transition-transform" />
+            </motion.a>
 
-          {/* Primary CTA */}
-          <a
-            href="#services"
-            className="relative inline-flex items-center justify-center px-10 py-5 text-lg font-semibold rounded-2xl 
-               bg-gradient-to-r from-primary to-vibrant text-white shadow-lg shadow-primary/40
-               transition-all duration-300 hover:scale-[1.07] hover:shadow-primary/60"
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              href="#demo"
+              className="px-8 py-4 glass border border-[var(--accent-color)]/10 rounded-xl font-semibold text-[var(--text-color)] hover:bg-[var(--accent-color)]/5 flex items-center justify-center gap-3 transition-colors"
+            >
+              <div className="w-8 h-8 rounded-full bg-[var(--accent-color)]/10 flex items-center justify-center">
+                <FaPlay className="text-xs ml-1 text-[var(--text-color)]" />
+              </div>
+              Watch Demo
+            </motion.a>
+          </div>
+
+          <div className="mt-12 flex items-center gap-8 text-[var(--text-contrast-color)]">
+            <div className="flex -space-x-4">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="w-10 h-10 rounded-full border-2 border-[var(--bg-color)] bg-surface-highlight flex items-center justify-center text-xs font-bold text-[var(--text-color)]">
+                  <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="User" className="w-full h-full rounded-full object-cover" />
+                </div>
+              ))}
+              <div className="w-10 h-10 rounded-full border-2 border-[var(--bg-color)] bg-surface-highlight flex items-center justify-center text-xs font-bold text-[var(--text-color)]">
+                +2k
+              </div>
+            </div>
+            <div className="text-sm font-medium">
+              Trusted by <span className="text-[var(--text-color)] font-bold">2,000+</span> innovators
+            </div>
+          </div>
+        </motion.div>
+
+        {/* 3D Visual - Digital Hive Mind */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="relative hidden lg:flex items-center justify-center h-[600px] w-full perspective-1000"
+        >
+          {/* Central Connectivity Hub */}
+          <div className="relative w-80 h-80">
+            {/* Main Orb */}
+            <motion.div
+              animate={{
+                boxShadow: [`0 0 20px var(--primary-color)/0.3`, `0 0 40px var(--primary-color)/0.4`, `0 0 20px var(--primary-color)/0.3`]
+              }}
+              transition={{ duration: 4, repeat: Infinity }}
+              className="absolute inset-20 bg-gradient-to-br from-[var(--primary-color)] via-[var(--secondary-color)] to-[var(--secondary-color)] rounded-full flex items-center justify-center z-20"
+            >
+              <FaBrain className="text-6xl text-[var(--bg-color)]/90 drop-shadow-lg" />
+            </motion.div>
+
+            {/* Spinning Rings */}
+            {[0, 1, 2].map((i) => (
+              <motion.div
+                key={i}
+                style={{
+                  position: 'absolute',
+                  inset: i * -20,
+                  border: '1px solid var(--accent-color)/0.1',
+                  borderRadius: '50%',
+                  borderTopColor: 'var(--primary-color)/0.3',
+                  borderBottomColor: 'var(--vibrant-color)/0.3'
+                }}
+                animate={{ rotate: i % 2 === 0 ? 360 : -360, scale: [1, 1.05, 1] }}
+                transition={{ duration: 15 + (i * 5), repeat: Infinity, ease: "linear" }}
+              />
+            ))}
+
+            {/* Orbiting Tech Nodes */}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-[-60px] z-10"
+            >
+              {/* Node 1 */}
+              <motion.div
+                className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 glass rounded-2xl border border-[var(--accent-color)]/20 flex items-center justify-center shadow-lg hover:scale-110 transition-transform cursor-pointer group"
+                whileHover={{ scale: 1.2 }}
+              >
+                <div className="absolute inset-0 bg-[var(--primary-color)]/20 blur-lg rounded-full group-hover:bg-[var(--primary-color)]/40 transition-colors" />
+                <FaGlobe className="text-[var(--text-color)] text-2xl relative z-10" />
+                <div className="absolute -top-8 bg-[var(--surface-color)]/90 text-[var(--text-color)] text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Global Connect</div>
+              </motion.div>
+
+              {/* Node 2 */}
+              <motion.div
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-14 h-14 glass rounded-full border border-[var(--accent-color)]/20 flex items-center justify-center shadow-lg"
+              >
+                <FaNetworkWired className="text-[var(--secondary-color)] text-xl" />
+              </motion.div>
+
+              {/* Node 3 */}
+              <motion.div
+                className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-[var(--surface-highlight)] border border-[var(--accent-color)]/10 rounded-lg flex items-center justify-center shadow-lg"
+              >
+                <FaBolt className="text-[var(--vibrant-color)] text-lg" />
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Floating Info Cards - Abstract Data */}
+          <motion.div
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 1 }}
+            className="absolute top-20 right-0 lg:right-10 glass p-4 rounded-xl border-l-2 border-[var(--primary-color)] max-w-[180px]"
           >
-            <span className="relative z-10">Explore Solutions</span>
-            <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-vibrant to-accent opacity-0 
-                     transition-opacity duration-300 hover:opacity-100"></span>
-          </a>
+            <div className="text-[10px] text-[var(--text-contrast-color)] uppercase mb-1">Processing Power</div>
+            <div className="h-1 w-full bg-[var(--accent-color)]/10 rounded-full overflow-hidden mb-2">
+              <motion.div
+                animate={{ width: ["0%", "100%"] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="h-full bg-[var(--primary-color)]"
+              />
+            </div>
+            <div className="text-xs font-bold text-[var(--text-color)]">128 TFLOPS</div>
+          </motion.div>
 
-          {/* Secondary CTA */}
-          <a
-            href="#contact"
-            className="backdrop-blur-md bg-white/5 border border-vibrant/60 text-vibrant px-10 py-5 text-lg 
-               rounded-2xl font-semibold shadow-md shadow-vibrant/20 
-               transition-all duration-300 hover:bg-vibrant hover:text-white hover:shadow-vibrant/40 
-               hover:scale-[1.05]"
+          <motion.div
+            initial={{ x: -50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 1.2 }}
+            className="absolute bottom-20 left-0 lg:left-10 glass p-4 rounded-xl border-l-2 border-[var(--secondary-color)] max-w-[180px]"
           >
-            Contact Us
-          </a>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="w-2 h-2 rounded-full bg-[var(--secondary-color)] animate-pulse" />
+              <span className="text-[10px] text-[var(--text-contrast-color)] uppercase">System Status</span>
+            </div>
+            <div className="text-xs font-bold text-[var(--text-color)]">Optimized</div>
+          </motion.div>
 
-        </div>
-
-
-        {/* Stats */}
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 animate-slideUp" style={{ animationDelay: '0.6s' }}>
-          <div className="bg-gradient-to-br from-[var(--surface-color)] to-[var(--bg-color)] p-6 rounded-2xl border border-[var(--primary-color)]/20 shadow-lg hover:shadow-xl transition-all duration-300">
-            <div className="text-4xl font-bold text-primary mb-2">50+</div>
-            <div className="text-[var(--text-contrast-color)]">Happy Clients</div>
-          </div>
-          <div className="bg-gradient-to-br from-[var(--surface-color)] to-[var(--bg-color)] p-6 rounded-2xl border border-[var(--vibrant-color)]/20 shadow-lg hover:shadow-xl transition-all duration-300">
-            <div className="text-4xl font-bold text-vibrant mb-2">150+</div>
-            <div className="text-[var(--text-contrast-color)]">Projects Done</div>
-          </div>
-          <div className="bg-gradient-to-br from-[var(--surface-color)] to-[var(--bg-color)] p-6 rounded-2xl border border-[var(--accent-color)]/20 shadow-lg hover:shadow-xl transition-all duration-300">
-            <div className="text-4xl font-bold text-accent mb-2">98%</div>
-            <div className="text-[var(--text-contrast-color)]">Satisfaction</div>
-          </div>
-        </div>
+        </motion.div>
       </div>
-
-      {/* Decorative elements */}
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
-
-      {/* Scroll indicator - Temporarily removed SVG for debugging */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-slow">
-        <a href="#about" className="text-[var(--text-contrast-color)] flex flex-col items-center">
-          <span className="text-sm mb-1">Discover More</span>
-        </a>
-      </div>
-
-      {/* Add CSS for animation delays */}
-      <style>{`
-        .animation-delay-1000 {
-          animation-delay: 1s;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-3000 {
-          animation-delay: 3s;
-        }
-        .animation-delay-5000 {
-          animation-delay: 5s;
-        }
-      `}</style>
     </section>
   );
 };

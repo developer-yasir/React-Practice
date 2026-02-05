@@ -1,18 +1,32 @@
+import React, { Suspense, lazy, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
-import ServicesPage from './pages/ServicesPage';
-import TechnologiesPage from './pages/TechnologiesPage';
-import ContactPage from './pages/ContactPage';
-import ProductsPage from './pages/ProductsPage';
-import ProcessPage from './pages/ProcessPage';
-import ResultsPage from './pages/ResultsPage';
-import PricingPage from './pages/PricingPage';
 import { useSelector, useDispatch } from 'react-redux';
 import { applyTheme } from './features/theme/themeSlice';
-import { useEffect } from 'react';
+
+// Lazy load pages for performance optimization
+const HomePage = lazy(() => import('./pages/HomePage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const ServicesPage = lazy(() => import('./pages/ServicesPage'));
+const TechnologiesPage = lazy(() => import('./pages/TechnologiesPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const ProductsPage = lazy(() => import('./pages/ProductsPage'));
+const ResultsPage = lazy(() => import('./pages/ResultsPage'));
+const PricingPage = lazy(() => import('./pages/PricingPage'));
+
+// High-fidelity loading fallback
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-[var(--bg-color)]">
+    <div className="relative w-24 h-24">
+      <div className="absolute inset-0 border-4 border-primary/20 rounded-full" />
+      <div className="absolute inset-0 border-4 border-t-primary rounded-full animate-spin" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="text-[10px] font-black uppercase tracking-widest animate-pulse">Orbit</span>
+      </div>
+    </div>
+  </div>
+);
 
 // Component to handle scroll to top on route change
 function ScrollToTop() {
@@ -41,17 +55,18 @@ function App() {
         <Navbar />
         <ScrollToTop />
         <main>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/technologies" element={<TechnologiesPage />} />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route path="/process" element={<ProcessPage />} />
-            <Route path="/results" element={<ResultsPage />} />
-            <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-          </Routes>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/services" element={<ServicesPage />} />
+              <Route path="/technologies" element={<TechnologiesPage />} />
+              <Route path="/products" element={<ProductsPage />} />
+              <Route path="/results" element={<ResultsPage />} />
+              <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+            </Routes>
+          </Suspense>
         </main>
         <Footer />
       </div>

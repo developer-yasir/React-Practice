@@ -1,94 +1,139 @@
 import React, { useState, useEffect } from 'react';
+import { motion, useAnimation, useMotionValue, useTransform } from 'framer-motion';
+import {
+  SiPython, SiNodedotjs, SiReact, SiTypescript, SiGo, SiDjango, SiFastapi,
+  SiTensorflow, SiPytorch, SiScikitlearn, SiKeras, SiOpencv, SiOpenai,
+  SiAmazon, SiGooglecloud, SiDocker, SiKubernetes, SiTerraform,
+  SiPostgresql, SiMongodb, SiApachekafka, SiApachespark, SiPandas, SiNumpy
+} from 'react-icons/si';
 
-const TechCategory = ({ title, children }) => (
-  <div className="mb-16 animate-fadeIn">
-    <h3 className="text-3xl font-bold text-light mb-10 text-center font-sans flex items-center justify-center relative">
-      <span className="relative z-10">{title}</span>
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-40 h-1 bg-gradient-to-r from-primary to-vibrant"></div>
-    </h3>
-    <div className="flex flex-wrap justify-center gap-4">
-      {children}
-    </div>
-  </div>
-);
+// Data structure for the tech stack
+const technologies = [
+  { name: 'TensorFlow', icon: SiTensorflow, color: '#FF6F00', category: 'AI/ML' },
+  { name: 'PyTorch', icon: SiPytorch, color: '#EE4C2C', category: 'AI/ML' },
+  { name: 'React', icon: SiReact, color: '#61DAFB', category: 'Frontend' },
+  { name: 'Node.js', icon: SiNodedotjs, color: '#339933', category: 'Backend' },
+  { name: 'Python', icon: SiPython, color: '#3776AB', category: 'Language' },
+  { name: 'TypeScript', icon: SiTypescript, color: '#3178C6', category: 'Language' },
+  { name: 'Docker', icon: SiDocker, color: '#2496ED', category: 'DevOps' },
+  { name: 'Kubernetes', icon: SiKubernetes, color: '#326CE5', category: 'DevOps' },
+  { name: 'AWS', icon: SiAmazon, color: '#FF9900', category: 'Cloud' },
+  { name: 'OpenAI', icon: SiOpenai, color: '#412991', category: 'AI/ML' },
+  { name: 'Go', icon: SiGo, color: '#00ADD8', category: 'Language' },
+  { name: 'PostgreSQL', icon: SiPostgresql, color: '#4169E1', category: 'Database' },
+  { name: 'MongoDB', icon: SiMongodb, color: '#47A248', category: 'Database' },
+  { name: 'FastAPI', icon: SiFastapi, color: '#009688', category: 'Backend' },
+];
 
-const TechItem = ({ name, delay }) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    // Small delay to stagger animations
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, delay || 0);
-
-    return () => clearTimeout(timer);
-  }, [delay]);
+const FloatingIcon = ({ tech, index, total }) => {
+  // Calculate distinct positions for a distributed "cloud" feel
+  // Using a spiral distribution or random within bounds
+  const angle = (index / total) * 2 * Math.PI;
+  const radius = 150 + (index % 3) * 60; // Varying radius
+  const x = Math.cos(angle) * radius;
+  const y = Math.sin(angle) * radius;
 
   return (
-    <div
-      className={`relative group bg-gradient-to-br from-[var(--surface-color)] to-[var(--bg-color)] text-[var(--text-color)] font-bold py-4 px-8 rounded-2xl shadow-xl transition-all duration-500 transform hover:scale-110 hover:shadow-2xl cursor-default ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-      }`}
-      style={{
-        animationDelay: `${delay || 0}ms`,
-      }}
+    <motion.div
+      className="absolute left-1/2 top-1/2"
+      style={{ x, y }}
+      initial={{ scale: 0, opacity: 0 }}
+      whileInView={{ scale: 1, opacity: 1 }}
+      transition={{ delay: index * 0.05, duration: 0.5 }}
+      viewport={{ once: true }}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-vibrant/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-      <div className="relative flex items-center">
-        <span className="mr-3 text-vibrant group-hover:animate-bounce">✦</span>
-        <span className="group-hover:text-vibrant transition-colors duration-300">{name}</span>
-      </div>
-      <div className="absolute -inset-1 bg-gradient-to-r from-primary to-vibrant rounded-2xl blur opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-    </div>
+      <motion.div
+        animate={{
+          y: [0, -15, 0],
+          x: [0, 5, 0],
+          rotate: [0, 5, -5, 0]
+        }}
+        transition={{
+          duration: 4 + (index % 3), // Randomize duration
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: index * 0.2
+        }}
+        className="relative group cursor-pointer"
+      >
+        {/* Glow Effect */}
+        <div
+          className="absolute inset-0 rounded-full blur-xl opacity-20 group-hover:opacity-60 transition-opacity duration-300"
+          style={{ backgroundColor: tech.color }}
+        />
+
+        {/* Icon Container */}
+        <div className="w-16 h-16 md:w-20 md:h-20 bg-[var(--surface-color)]/80 backdrop-blur-md rounded-2xl border border-[var(--accent-color)]/10 flex items-center justify-center relative z-10 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:border-primary/50">
+          <tech.icon className="text-3xl md:text-4xl transition-colors duration-300" style={{ color: tech.color }} />
+        </div>
+
+        {/* Tooltip */}
+        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-20">
+          <div className="bg-[var(--bg-color)]/80 text-[var(--text-color)] text-xs px-3 py-1.5 rounded-full backdrop-blur-sm border border-[var(--accent-color)]/10">
+            {tech.name}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+const NeuralConnection = () => {
+  return (
+    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20">
+      <defs>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(var(--accent-color-rgb),0.1)" strokeWidth="1" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid)" />
+    </svg>
   );
 };
 
 const Technologies = () => {
   return (
-    <section className="bg-gradient-to-b from-[var(--bg-color)] to-[var(--surface-color)] text-[var(--text-color)] py-20 px-4" id="technologies">
-      <div className="container mx-auto max-w-6xl">
-        <h2 className="text-4xl font-bold text-center mb-16 text-light font-sans relative inline-block mx-auto">
-          Our Core Technologies
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-40 h-1 bg-gradient-to-r from-primary to-vibrant rounded-full"></div>
-        </h2>
+    <section className="min-h-[800px] flex items-center justify-center py-24 px-6 bg-[var(--bg-color)] relative overflow-hidden" id="technologies">
+      {/* Dynamic Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(17,24,39,0)_0%,_var(--bg-color)_100%)] z-10" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] pointer-events-none opacity-40 mix-blend-screen" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none opacity-40 mix-blend-screen" />
 
-        <TechCategory title="Artificial Intelligence & Machine Learning">
-          <TechItem name="TensorFlow" delay={100} />
-          <TechItem name="PyTorch" delay={200} />
-          <TechItem name="Scikit-learn" delay={300} />
-          <TechItem name="Keras" delay={400} />
-          <TechItem name="OpenCV" delay={500} />
-          <TechItem name="GPT Models" delay={600} />
-          <TechItem name="Reinforcement Learning" delay={700} />
-        </TechCategory>
+      <NeuralConnection />
 
-        <TechCategory title="Development Frameworks & Languages">
-          <TechItem name="Python" delay={100} />
-          <TechItem name="Node.js" delay={200} />
-          <TechItem name="React" delay={300} />
-          <TechItem name="TypeScript" delay={400} />
-          <TechItem name="Go" delay={500} />
-          <TechItem name="Django" delay={600} />
-          <TechItem name="FastAPI" delay={700} />
-        </TechCategory>
+      <div className="container mx-auto max-w-7xl relative z-20">
+        <div className="text-center mb-10 md:mb-0 relative pointer-events-none">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="relative z-30 inline-block"
+          >
+            <h2 className="text-5xl md:text-7xl font-bold font-display mb-6 tracking-tight">
+              Neural <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-400 to-secondary animate-gradient-x">Nexus</span>
+            </h2>
+            <p className="text-xl text-[var(--text-contrast-color)] max-w-2xl mx-auto backdrop-blur-sm">
+              Our architecture is built on a constellation of advanced technologies, orbiting around performance and scalability.
+            </p>
+          </motion.div>
+        </div>
 
-        <TechCategory title="Cloud & Deployment">
-          <TechItem name="AWS" delay={100} />
-          <TechItem name="Google Cloud Platform (GCP)" delay={200} />
-          <TechItem name="Azure" delay={300} />
-          <TechItem name="Docker" delay={400} />
-          <TechItem name="Kubernetes" delay={500} />
-          <TechItem name="Terraform" delay={600} />
-        </TechCategory>
+        {/* The Orbit Container */}
+        <div className="relative h-[600px] w-full flex items-center justify-center perspective-1000">
+          <motion.div
+            className="relative w-[300px] h-[300px] md:w-[600px] md:h-[600px]"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+          >
+            {/* Core Node */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-2xl animate-pulse" />
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[var(--accent-color)] rounded-full shadow-[0_0_20px_rgba(var(--accent-color-rgb),0.8)] z-0" />
 
-        <TechCategory title="Data & Analytics">
-          <TechItem name="SQL" delay={100} />
-          <TechItem name="NoSQL" delay={200} />
-          <TechItem name="Apache Kafka" delay={300} />
-          <TechItem name="Spark" delay={400} />
-          <TechItem name="Pandas" delay={500} />
-          <TechItem name="NumPy" delay={600} />
-        </TechCategory>
+            {/* Satellites */}
+            {technologies.map((tech, index) => (
+              <FloatingIcon key={index} tech={tech} index={index} total={technologies.length} />
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   );

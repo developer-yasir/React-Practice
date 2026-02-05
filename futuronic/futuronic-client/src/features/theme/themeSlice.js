@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  mode: 'dark', // 'dark' or 'light'
+  mode: typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark', // 'dark' or 'light'
 };
 
 const themeSlice = createSlice({
@@ -35,6 +35,9 @@ export const applyTheme = (mode) => {
       root.style.setProperty('--text-contrast-color', '#cccccc'); // light gray
       root.style.setProperty('--logo-primary', '#f97316'); // orange for logo
       root.style.setProperty('--logo-secondary', '#22c55e'); // green for logo
+      root.style.setProperty('--glass-bg', 'rgba(15, 23, 42, 0.6)');
+      root.style.setProperty('--glass-card-bg', 'linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.6))');
+      root.style.setProperty('--glass-border', 'rgba(255, 255, 255, 0.05)');
     } else {
       root.setAttribute('data-theme', 'light');
       root.style.setProperty('--primary-color', '#f97316'); // orange
@@ -48,6 +51,9 @@ export const applyTheme = (mode) => {
       root.style.setProperty('--text-contrast-color', '#64748b'); // medium gray
       root.style.setProperty('--logo-primary', '#f97316'); // orange for logo in light mode
       root.style.setProperty('--logo-secondary', '#22c55e'); // green for logo in light mode
+      root.style.setProperty('--glass-bg', 'rgba(255, 255, 255, 0.7)');
+      root.style.setProperty('--glass-card-bg', 'linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(241, 245, 249, 0.8))');
+      root.style.setProperty('--glass-border', 'rgba(15, 23, 42, 0.05)');
     }
   }
 };

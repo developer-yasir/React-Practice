@@ -1,137 +1,112 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { FaSearch, FaLightbulb, FaCode, FaRocket, FaCogs, FaChartLine } from 'react-icons/fa';
 
 const HowItWorks = () => {
   const steps = [
     {
       number: "01",
       title: "Discovery & Consultation",
-      description: "We start with a comprehensive assessment of your business needs, challenges, and goals to understand how AI can best serve your organization."
+      description: "We dive deep into your business ecosystem to identify bottlenecks and opportunities for AI intervention.",
+      icon: <FaSearch />
     },
     {
       number: "02",
-      title: "Solution Design",
-      description: "Our experts design a customized AI solution tailored to your specific requirements, with clear milestones and success metrics."
+      title: "Strategy & Design",
+      description: "Our architects draft a comprehensive roadmap and technical specifications tailored to your goals.",
+      icon: <FaLightbulb />
     },
     {
       number: "03",
-      title: "Development & Integration",
-      description: "We build and seamlessly integrate your AI solution, ensuring minimal disruption to your existing operations."
+      title: "Agile Development",
+      description: "We build your solution in iterative sprints, ensuring transparency and rapid feedback loops.",
+      icon: <FaCode />
     },
     {
       number: "04",
-      title: "Testing & Optimization",
-      description: "Rigorous testing ensures optimal performance, followed by fine-tuning to maximize effectiveness and ROI."
+      title: "Integration & Testing",
+      description: "Seamless integration with your existing stack, followed by rigorous stress-testing and QA.",
+      icon: <FaCogs />
     },
     {
       number: "05",
-      title: "Deployment & Training",
-      description: "We deploy the solution and provide comprehensive training to your team for seamless adoption."
+      title: "Deployment",
+      description: "Smooth rollout with zero downtime, including team training and documentation.",
+      icon: <FaRocket />
     },
     {
       number: "06",
-      title: "Support & Maintenance",
-      description: "Ongoing support, monitoring, and updates ensure your AI solution continues to deliver exceptional value."
+      title: "Optimization & Scale",
+      description: "Continuous monitoring and refinement to ensure the solution scales with your growth.",
+      icon: <FaChartLine />
     }
   ];
 
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-[var(--surface-color)] to-[var(--bg-color)] text-[var(--text-color)] relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-vibrant rounded-full mix-blend-soft-light filter blur-3xl opacity-5 animate-pulse"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-primary rounded-full mix-blend-soft-light filter blur-3xl opacity-5 animate-pulse animation-delay-2000"></div>
-      </div>
+    <section className="bg-[var(--bg-color)] py-24 px-6 relative overflow-hidden" id="process">
+      {/* Background Elements */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-[1200px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
-      <div className="container mx-auto relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-6 text-[var(--text-color)] font-sans relative inline-block mx-auto">
-            How It Works
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-primary to-vibrant rounded-full"></div>
-          </h2>
-          <p className="text-lg text-[var(--text-contrast-color)] max-w-3xl mx-auto">
-            Our proven 6-step process ensures seamless AI integration and maximum business impact.
+      <div className="container mx-auto max-w-6xl relative z-10">
+        <div className="text-center mb-20">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-6xl font-bold font-display mb-6"
+          >
+            The <span className="text-gradient">Process</span>
+          </motion.h2>
+          <p className="text-xl text-[var(--text-contrast-color)] max-w-2xl mx-auto">
+            From concept to code, our streamlined workflow ensures delivery of high-impact AI solutions.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {steps.map((step, index) => (
-            <div 
-              key={index}
-              className="flex items-start space-x-6 bg-gradient-to-br from-[var(--bg-color)] to-[var(--surface-color)] p-8 rounded-2xl border border-[var(--primary-color)]/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
-            >
-              <div className="flex-shrink-0">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-primary to-vibrant flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-primary/30">
-                  {step.number}
-                </div>
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold mb-3 text-[var(--text-color)]">{step.title}</h3>
-                <p className="text-[var(--text-contrast-color)]">{step.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <div className="relative">
+          {/* Vertical Connecting Line (Desktop) */}
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-1 bg-[var(--accent-color)]/10 -translate-x-1/2 rounded-full overflow-hidden">
+            <motion.div
+              initial={{ height: 0 }}
+              whileInView={{ height: '100%' }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+              className="w-full bg-gradient-to-b from-primary via-secondary to-primary h-full"
+            />
+          </div>
 
-        {/* Process Timeline */}
-        <div className="mt-20">
-          <h3 className="text-3xl font-bold text-center mb-12 text-[var(--text-color)]">Implementation Timeline</h3>
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-vibrant transform -translate-x-1/2"></div>
-            
-            <div className="space-y-12">
-              {steps.map((step, index) => (
-                <div 
-                  key={index} 
-                  className={`flex ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} items-center`}
-                >
-                  <div className={`w-1/2 ${index % 2 === 0 ? 'pr-12 text-right' : 'pl-12 text-left'}`}>
-                    <div className="bg-gradient-to-br from-[var(--surface-color)] to-[var(--bg-color)] p-6 rounded-2xl border border-[var(--primary-color)]/20 shadow-lg">
-                      <h4 className="text-xl font-bold mb-2 text-[var(--text-color)]">{step.title}</h4>
-                      <p className="text-[var(--text-contrast-color)]">{step.description}</p>
-                    </div>
+          <div className="space-y-12 md:space-y-24">
+            {steps.map((step, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ margin: "-100px" }}
+                className={`flex flex-col md:flex-row items-center gap-8 md:gap-16 ${index % 2 === 0 ? '' : 'md:flex-row-reverse'}`}
+              >
+                {/* Step Content */}
+                <div className="flex-1 text-center md:text-left">
+                  <div className={`glass p-8 rounded-3xl border border-[var(--accent-color)]/5 hover:border-primary/30 transition-all duration-300 group hover:-translate-y-2 ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
+                    <h3 className="text-2xl font-bold text-[var(--text-color)] mb-4 group-hover:text-primary transition-colors">{step.title}</h3>
+                    <p className="text-[var(--text-contrast-color)] leading-relaxed">{step.description}</p>
                   </div>
-                  <div className="w-1/12 flex-shrink-0 flex items-center justify-center">
-                    <div className="w-8 h-8 rounded-full bg-vibrant flex items-center justify-center text-white font-bold shadow-lg">
-                      {index + 1}
-                    </div>
-                  </div>
-                  <div className="w-1/2"></div>
                 </div>
-              ))}
-            </div>
+
+                {/* Center Node */}
+                <div className="relative z-10">
+                  <div className="w-16 h-16 rounded-full glass flex items-center justify-center text-primary text-2xl border border-[var(--accent-color)]/10 shadow-lg shadow-primary/20 relative group">
+                    {/* Pulse Effect */}
+                    <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping opacity-0 group-hover:opacity-100 transition-opacity" />
+                    {step.icon}
+                  </div>
+                </div>
+
+                {/* Empty Space for alignment */}
+                <div className="flex-1 hidden md:block" />
+              </motion.div>
+            ))}
           </div>
         </div>
 
-        {/* CTA */}
-        <div className="mt-20 text-center">
-          <h3 className="text-3xl font-bold mb-6 text-[var(--text-color)]">Ready to Transform Your Business?</h3>
-          <p className="text-xl text-[var(--text-contrast-color)] mb-10 max-w-3xl mx-auto">
-            Start your AI journey today with a complimentary consultation and discovery session.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-6">
-            <a 
-              href="#contact" 
-              className="bg-gradient-to-r from-primary to-vibrant hover:from-vibrant hover:to-accent text-white font-bold py-5 px-10 rounded-xl text-lg shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
-            >
-              Schedule Consultation
-            </a>
-            <a 
-              href="#contact" 
-              className="bg-transparent border-2 border-vibrant text-vibrant hover:bg-vibrant hover:text-white font-bold py-5 px-10 rounded-xl text-lg transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
-            >
-              Request Demo
-            </a>
-          </div>
-        </div>
       </div>
-
-      {/* Add CSS for animation delays */}
-      <style jsx>{`
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-      `}</style>
     </section>
   );
 };

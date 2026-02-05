@@ -1,128 +1,140 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FaTwitter, FaLinkedinIn, FaGithub, FaInstagram, FaPaperPlane } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState('');
 
-  const socialLinks = [
-    { name: 'Twitter', url: '#', icon: '𝕏' },
-    { name: 'LinkedIn', url: '#', icon: '💼' },
-    { name: 'GitHub', url: '#', icon: '🐱' },
-    { name: 'Instagram', url: '#', icon: '📸' },
-  ];
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle newsletter signup
+    console.log("Subscribed:", email);
+    setEmail('');
+    alert("Thanks for subscribing!");
+  };
 
-  const quickLinks = [
-    { name: 'Home', url: '/' },
-    { name: 'About', url: '/about' },
-    { name: 'Services', url: '/services' },
-    { name: 'Technologies', url: '/technologies' },
-    { name: 'Products', url: '/products' },
-    { name: 'Contact', url: '/contact' },
-  ];
+  const footerLinks = {
+    product: [
+      { name: 'AI Assistant', path: '/products' },
+      { name: 'Predictive Analytics', path: '/products' },
+      { name: 'Vision Engine', path: '/products' },
+      { name: 'Data Pipeline', path: '/products' },
+    ],
+    company: [
+      { name: 'About Us', path: '/about' },
+      { name: 'Careers', path: '/about' },
+      { name: 'Blog', path: '#' },
+      { name: 'Contact', path: '/contact' },
+    ],
+    legal: [
+      { name: 'Privacy Policy', path: '#' },
+      { name: 'Terms of Service', path: '#' },
+      { name: 'Security', path: '#' },
+    ]
+  };
 
   return (
-    <footer className="bg-gradient-to-t from-[var(--bg-color)] to-[var(--surface-color)] text-[var(--text-color)] py-24 px-4 font-sans border-t border-[var(--primary-color)]/20 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-vibrant rounded-full mix-blend-soft-light filter blur-3xl opacity-5 animate-pulse"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-primary rounded-full mix-blend-soft-light filter blur-3xl opacity-5 animate-pulse animation-delay-2000"></div>
-        <div className="absolute top-1/3 right-1/3 w-24 h-24 bg-accent rounded-full mix-blend-soft-light filter blur-3xl opacity-5 animate-pulse animation-delay-4000"></div>
-      </div>
+    <footer className="relative bg-[var(--surface-color)] text-[var(--text-color)] pt-24 pb-12 overflow-hidden border-t border-[var(--accent-color)]/5">
+      {/* Background Glows */}
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none translate-y-[-50%] translate-x-[-20%]" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[120px] pointer-events-none translate-y-[50%] translate-x-[20%]" />
 
-      <div className="container mx-auto max-w-7xl relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
-          {/* Company Info */}
-          <div className="lg:col-span-2">
-            <h3 className="text-3xl font-bold mb-6 font-sans">
-              <span className="bg-gradient-to-r from-logo-primary to-logo-secondary bg-clip-text text-transparent">Futuronic</span>
-            </h3>
-            <p className="text-[var(--text-contrast-color)] mb-8 text-lg">
-              Pioneering artificial intelligence solutions and automation tools to redefine industries and empower your future.
-            </p>
-            <div className="flex space-x-6">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--text-contrast-color)] hover:text-vibrant transition-all duration-300 text-2xl p-3 rounded-full hover:bg-gradient-to-r hover:from-primary/10 hover:to-vibrant/10 hover:scale-110 shadow-lg hover:shadow-xl hover:shadow-primary/20"
-                  aria-label={social.name}
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
+
+          {/* Brand Column */}
+          <div className="lg:col-span-4 space-y-6">
+            <Link to="/" className="inline-flex items-center group">
+              <div className="relative px-5 py-2">
+                <span
+                  className="text-4xl font-black font-display tracking-tighter text-[var(--text-color)] group-hover:text-primary transition-all duration-300 transform group-hover:scale-105 inline-block"
+                  style={{ clipPath: 'polygon(0 0, 100% 0, 100% 45%, 0 45%, 0 55%, 100% 55%, 100% 100%, 0 100%)' }}
                 >
-                  {social.icon}
+                  FUTURONIC
+                </span>
+                <div className="absolute -bottom-1 left-5 right-5 h-0.5 bg-primary/20 group-hover:bg-primary transition-colors duration-500" />
+              </div>
+            </Link>
+            <p className="text-[var(--text-contrast-color)] text-lg leading-relaxed max-w-sm">
+              Empowering the next generation of enterprises with intelligent, scalable, and ethical AI solutions.
+            </p>
+            <div className="flex gap-4">
+              {[FaTwitter, FaLinkedinIn, FaGithub, FaInstagram].map((Icon, i) => (
+                <a key={i} href="#" className="w-10 h-10 rounded-full glass flex items-center justify-center text-[var(--text-contrast-color)] hover:bg-[var(--primary-color)] hover:text-[var(--bg-color)] transition-all duration-300 hover:-translate-y-1">
+                  <Icon />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-xl font-bold mb-6 text-[var(--text-color)] flex items-center">
-              <span className="mr-3 text-vibrant">→</span> Quick Links
-            </h4>
+          {/* Links Columns */}
+          <div className="lg:col-span-2 lg:col-start-6">
+            <h4 className="font-bold text-[var(--text-color)] mb-6 text-lg">Product</h4>
             <ul className="space-y-4">
-              {quickLinks.map((link, index) => (
-                <li key={index}>
-                  <a
-                    href={link.url}
-                    className="text-[var(--text-contrast-color)] hover:text-vibrant transition-all duration-300 flex items-center group text-lg"
-                  >
-                    <span className="mr-3 opacity-0 group-hover:opacity-100 transition-opacity text-vibrant">◦</span>
+              {footerLinks.product.map((link, i) => (
+                <li key={i}>
+                  <Link to={link.path} className="text-[var(--text-contrast-color)] hover:text-primary transition-colors hover:pl-2 inline-block duration-200">
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Services */}
-          <div>
-            <h4 className="text-xl font-bold mb-6 text-[var(--text-color)] flex items-center">
-              <span className="mr-3 text-vibrant">→</span> Services
-            </h4>
+          <div className="lg:col-span-2">
+            <h4 className="font-bold text-[var(--text-color)] mb-6 text-lg">Company</h4>
             <ul className="space-y-4">
-              <li><a href="#services" className="text-[var(--text-contrast-color)] hover:text-vibrant transition-all duration-300 flex items-center group text-lg"> <span className="mr-3 opacity-0 group-hover:opacity-100 transition-opacity text-vibrant">◦</span> AI Solutions</a></li>
-              <li><a href="#services" className="text-[var(--text-contrast-color)] hover:text-vibrant transition-all duration-300 flex items-center group text-lg"> <span className="mr-3 opacity-0 group-hover:opacity-100 transition-opacity text-vibrant">◦</span> Automation Tools</a></li>
-              <li><a href="#services" className="text-[var(--text-contrast-color)] hover:text-vibrant transition-all duration-300 flex items-center group text-lg"> <span className="mr-3 opacity-0 group-hover:opacity-100 transition-opacity text-vibrant">◦</span> Custom ML Tools</a></li>
-              <li><a href="#technologies" className="text-[var(--text-contrast-color)] hover:text-vibrant transition-all duration-300 flex items-center group text-lg"> <span className="mr-3 opacity-0 group-hover:opacity-100 transition-opacity text-vibrant">◦</span> Technology Stack</a></li>
+              {footerLinks.company.map((link, i) => (
+                <li key={i}>
+                  <Link to={link.path} className="text-[var(--text-contrast-color)] hover:text-primary transition-colors hover:pl-2 inline-block duration-200">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Contact Info */}
-          <div>
-            <h4 className="text-xl font-bold mb-6 text-[var(--text-color)] flex items-center">
-              <span className="mr-3 text-vibrant">→</span> Contact Us
-            </h4>
-            <ul className="space-y-5 text-[var(--text-contrast-color)] text-lg">
-              <li className="flex items-start group">
-                <span className="mr-3 text-vibrant group-hover:animate-bounce text-xl">📍</span>
-                <span>123 Innovation Drive, Tech City</span>
-              </li>
-              <li className="flex items-start group">
-                <span className="mr-3 text-vibrant group-hover:animate-bounce text-xl">📞</span>
-                <span>+1 (555) 123-4567</span>
-              </li>
-              <li className="flex items-start group">
-                <span className="mr-3 text-vibrant group-hover:animate-bounce text-xl">✉️</span>
-                <span>info@futuronic.ai</span>
-              </li>
-            </ul>
+          {/* Newsletter Column */}
+          <div className="lg:col-span-3">
+            <h4 className="font-bold text-[var(--text-color)] mb-6 text-lg">Stay Updated</h4>
+            <p className="text-[var(--text-contrast-color)] mb-6">
+              Join our newsletter for the latest AI insights and product updates.
+            </p>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="relative">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-[var(--accent-color)]/5 border border-[var(--accent-color)]/10 rounded-xl px-4 py-3 text-[var(--text-color)] placeholder-[var(--text-contrast-color)]/50 focus:outline-none focus:border-primary transition-colors pr-12"
+                />
+                <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-[var(--primary-color)] rounded-lg flex items-center justify-center text-[var(--bg-color)] hover:bg-[var(--secondary-color)] transition-colors">
+                  <FaPaperPlane size={12} />
+                </button>
+              </div>
+              <p className="text-xs text-[var(--text-contrast-color)]/60">
+                By subscribing, you agree to our Privacy Policy and consent to receive updates.
+              </p>
+            </form>
           </div>
         </div>
 
-        <div className="border-t border-[var(--primary-color)]/20 mt-16 pt-10 text-center text-[var(--text-contrast-color)]">
-          <p className="text-lg">&copy; {currentYear} Futuronic. All rights reserved.</p>
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-[var(--accent-color)]/5 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-[var(--text-contrast-color)] text-sm">
+            &copy; {new Date().getFullYear()} Futuronic AI Inc. All rights reserved.
+          </p>
+          <div className="flex gap-6 text-sm">
+            {footerLinks.legal.map((link, i) => (
+              <a key={i} href={link.path} className="text-[var(--text-contrast-color)] hover:text-primary transition-colors">
+                {link.name}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
-
-      {/* Add CSS for animation delays */}
-      <style jsx>{`
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-      `}</style>
     </footer>
   );
 };

@@ -35,8 +35,8 @@ const ContinuousCarousel = () => {
         <div className="relative overflow-hidden py-12">
           <div className="flex animate-scroll whitespace-nowrap">
             {[...clients, ...clients].map((client, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="mx-8 flex items-center justify-center p-8 bg-gradient-to-br from-[var(--surface-color)] to-[var(--bg-color)] rounded-2xl border border-[var(--primary-color)]/20 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-110 hover:rotate-1 relative group"
               >
                 <div className="absolute -inset-1 bg-gradient-to-r from-primary to-vibrant rounded-2xl blur opacity-0 group-hover:opacity-75 transition-opacity duration-500 animate-pulse"></div>
@@ -53,20 +53,6 @@ const ContinuousCarousel = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        
-        .animate-scroll {
-          animation: scroll 30s linear infinite;
-        }
-      `}</style>
     </section>
   );
 };

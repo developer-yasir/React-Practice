@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FaCheck, FaTimes } from 'react-icons/fa';
+import FAQ from '../components/FAQ';
+import { useSelector } from 'react-redux';
 
 const Pricing = () => {
   const [billingCycle, setBillingCycle] = useState('monthly');
+  const themeMode = useSelector((state) => state.theme.mode);
 
   const plans = [
     {
       name: 'Starter',
       price: billingCycle === 'monthly' ? '$99' : '$990',
-      period: billingCycle === 'monthly' ? '/month' : '/year',
+      period: billingCycle === 'monthly' ? '/mo' : '/yr',
       description: 'Perfect for small businesses getting started with AI',
       features: [
         'Basic AI Automation Tools',
@@ -16,13 +21,15 @@ const Pricing = () => {
         'Standard Integrations',
         'Basic Analytics Dashboard'
       ],
+      notIncluded: ['Custom Integrations', 'Dedicated Account Manager'],
       cta: 'Get Started',
-      popular: false
+      popular: false,
+      color: 'border-white/10'
     },
     {
       name: 'Professional',
       price: billingCycle === 'monthly' ? '$299' : '$2,990',
-      period: billingCycle === 'monthly' ? '/month' : '/year',
+      period: billingCycle === 'monthly' ? '/mo' : '/yr',
       description: 'Ideal for growing businesses with advanced needs',
       features: [
         'Advanced AI Automation',
@@ -30,11 +37,12 @@ const Pricing = () => {
         'Priority Email & Chat Support',
         'Custom Integrations',
         'Advanced Analytics Dashboard',
-        'Dedicated Account Manager',
-        'Monthly Performance Reviews'
+        'Dedicated Account Manager'
       ],
+      notIncluded: [],
       cta: 'Try Free for 14 Days',
-      popular: true
+      popular: true,
+      color: 'border-primary shadow-primary/20'
     },
     {
       name: 'Enterprise',
@@ -47,119 +55,118 @@ const Pricing = () => {
         '24/7 Phone & Chat Support',
         'Custom Integrations',
         'White-label Solutions',
-        'Dedicated Technical Team',
-        'Quarterly Business Reviews',
-        'Custom Development Projects'
+        'Dedicated Technical Team'
       ],
+      notIncluded: [],
       cta: 'Contact Sales',
-      popular: false
+      popular: false,
+      color: 'border-white/10'
     }
   ];
 
-  return (
-    <section className="py-24 px-4 bg-gradient-to-b from-[var(--bg-color)] to-[var(--surface-color)] text-[var(--text-color)] relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-vibrant rounded-full mix-blend-soft-light filter blur-3xl opacity-5 animate-pulse"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-primary rounded-full mix-blend-soft-light filter blur-3xl opacity-5 animate-pulse animation-delay-2000"></div>
-      </div>
+  const planCardBorder = (isPopular) => {
+    if (isPopular) return 'border-primary shadow-2xl shadow-primary/10 transform scale-105 z-10';
+    if (themeMode === 'dark') return 'border border-white/5';
+    return 'border border-black/5';
+  };
 
-      <div className="container mx-auto relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-6 text-[var(--text-color)] font-sans relative inline-block mx-auto">
-            Simple, Transparent Pricing
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-40 h-1 bg-gradient-to-r from-primary to-vibrant rounded-full"></div>
-          </h2>
-          <p className="text-lg text-[var(--text-contrast-color)] max-w-3xl mx-auto mb-10">
+  const ctaButtonClasses = (isPopular) => {
+    if (isPopular) {
+      return 'bg-primary hover:bg-secondary text-white shadow-lg shadow-primary/25';
+    }
+    if (themeMode === 'dark') {
+      return 'bg-white/5 hover:bg-white/10 text-white border border-white/10';
+    }
+    return 'bg-black/5 hover:bg-black/10 text-black border border-black/10';
+  };
+
+  return (
+    <section className="bg-[var(--bg-color)] py-24 px-6 relative overflow-hidden" id="pricing">
+      {/* Background Elements */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[1000px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="text-center mb-20">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-6xl font-bold font-display mb-6"
+          >
+            Simple, Transparent <span className="text-gradient">Pricing</span>
+          </motion.h2>
+          <p className="text-xl text-[var(--text-contrast-color)] max-w-2xl mx-auto mb-10">
             Choose the plan that fits your business needs. All plans include our core AI capabilities.
           </p>
-          
+
           {/* Billing Toggle */}
-          <div className="flex items-center justify-center mb-16">
-            <span className={`mr-4 font-medium ${billingCycle === 'monthly' ? 'text-[var(--text-contrast-color)]' : 'text-vibrant'}`}>Monthly</span>
+          <div className="flex items-center justify-center gap-4">
+            <span className={`text-lg transition-colors ${billingCycle === 'monthly' ? 'text-[var(--text-color)] font-bold' : 'text-[var(--text-contrast-color)]'}`}>Monthly</span>
             <button
               onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'yearly' : 'monthly')}
-              className="relative rounded-full w-16 h-8 bg-gradient-to-r from-primary to-vibrant"
+              className="w-16 h-8 bg-[var(--surface-color)] rounded-full p-1 relative transition-colors duration-300 border border-[var(--accent-color)]/10"
             >
-              <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ${
-                billingCycle === 'monthly' ? 'left-1' : 'left-9'
-              }`}></div>
+              <motion.div
+                animate={{ x: billingCycle === 'monthly' ? 0 : 32 }}
+                className="w-6 h-6 bg-primary rounded-full shadow-lg"
+              />
             </button>
-            <span className={`ml-4 font-medium ${billingCycle === 'yearly' ? 'text-[var(--text-contrast-color)]' : 'text-vibrant'}`}>
-              Yearly <span className="text-sm bg-gradient-to-r from-primary to-vibrant text-transparent bg-clip-text">(Save 20%)</span>
+            <span className={`text-lg transition-colors ${billingCycle === 'yearly' ? 'text-[var(--text-color)] font-bold' : 'text-[var(--text-contrast-color)]'}`}>
+              Yearly <span className="text-primary text-sm font-bold bg-primary/10 px-2 py-1 rounded-full ml-1">-20%</span>
             </span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start mb-24">
           {plans.map((plan, index) => (
-            <div 
+            <motion.div
               key={index}
-              className={`relative bg-gradient-to-br from-[var(--surface-color)] to-[var(--bg-color)] rounded-2xl p-8 border shadow-xl transition-all duration-300 transform hover:scale-105 ${
-                plan.popular 
-                  ? 'border-vibrant ring-2 ring-vibrant/20 ring-offset-2 ring-offset-[var(--bg-color)]' 
-                  : 'border-[var(--primary-color)]/20'
-              }`}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ y: -10 }}
+              className={`glass p-8 md:p-10 rounded-3xl relative transition-all duration-300 ${planCardBorder(plan.popular)}`}
             >
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-gradient-to-r from-vibrant to-primary text-white text-sm font-bold px-6 py-2 rounded-full">
-                    MOST POPULAR
-                  </span>
+                <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-secondary text-white px-6 py-2 rounded-full font-bold text-sm shadow-lg">
+                  MOST POPULAR
                 </div>
               )}
-              
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold mb-2 text-[var(--text-color)]">{plan.name}</h3>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold text-vibrant">{plan.price}</span>
-                  <span className="text-[var(--text-contrast-color)]">{plan.period}</span>
-                </div>
-                <p className="text-[var(--text-contrast-color)]">{plan.description}</p>
+
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold text-[var(--text-color)] mb-2">{plan.name}</h3>
+                <p className="text-[var(--text-contrast-color)] text-sm">{plan.description}</p>
               </div>
-              
-              <ul className="mb-8 space-y-4">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center">
-                    <svg className="w-5 h-5 text-vibrant mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span className="text-[var(--text-contrast-color)]">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              
-              <button 
-                className={`w-full py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 ${
-                  plan.popular
-                    ? 'bg-gradient-to-r from-primary to-vibrant hover:from-vibrant hover:to-accent text-white shadow-lg shadow-primary/30 hover:shadow-2xl hover:shadow-primary/50'
-                    : 'bg-gradient-to-r from-[var(--surface-color)] to-gray-700 hover:from-gray-700 hover:to-gray-800 text-[var(--text-color)] border border-[var(--primary-color)]/30'
-                }`}
-              >
+
+              <div className="mb-8">
+                <span className="text-5xl font-bold text-[var(--text-color)]">{plan.price}</span>
+                <span className="text-[var(--text-contrast-color)] ml-2">{plan.period}</span>
+              </div>
+
+              <button className={`w-full py-4 rounded-xl font-bold mb-10 transition-all duration-300 ${ctaButtonClasses(plan.popular)}`}>
                 {plan.cta}
               </button>
-            </div>
+
+              <div className="space-y-4">
+                {plan.features.map((feature, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <FaCheck className="text-primary mt-1 shrink-0" />
+                    <span className="text-[var(--text-contrast-color)] text-sm">{feature}</span>
+                  </div>
+                ))}
+                {plan.notIncluded?.map((feature, i) => (
+                  <div key={i} className="flex items-start gap-3 opacity-50">
+                    <FaTimes className="text-[var(--text-contrast-color)] mt-1 shrink-0" />
+                    <span className="text-[var(--text-contrast-color)] text-sm">{feature}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           ))}
         </div>
 
-        {/* Free Trial Banner */}
-        <div className="mt-16 bg-gradient-to-r from-[var(--surface-color)] to-[var(--bg-color)] p-8 rounded-2xl border border-[var(--vibrant-color)]/30 text-center">
-          <h3 className="text-2xl font-bold mb-4 text-[var(--text-color)]">Not Ready to Commit?</h3>
-          <p className="text-[var(--text-contrast-color)] mb-6 max-w-2xl mx-auto">
-            Start with our 14-day free trial. No credit card required. Experience the power of our AI solutions risk-free.
-          </p>
-          <button className="bg-gradient-to-r from-vibrant to-accent hover:from-accent hover:to-primary text-white font-bold py-4 px-10 rounded-xl text-lg shadow-lg shadow-vibrant/30 hover:shadow-2xl hover:shadow-vibrant/50 transition-all duration-300 transform hover:scale-105">
-            Start Free Trial
-          </button>
-        </div>
-      </div>
+        <FAQ />
 
-      {/* Add CSS for animation delays */}
-      <style jsx>{`
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-      `}</style>
+      </div>
     </section>
   );
 };

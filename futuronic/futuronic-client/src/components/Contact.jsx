@@ -1,183 +1,253 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { FaPaperPlane, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaShieldAlt, FaRocket, FaClock } from 'react-icons/fa';
+
+const ContactCard = ({ icon, title, content }) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [15, -15]), { damping: 20, stiffness: 150 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-15, 15]), { damping: 20, stiffness: 150 });
+
+  function onMouseMove(event) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const mouseX = (event.clientX - rect.left) / rect.width - 0.5;
+    const mouseY = (event.clientY - rect.top) / rect.height - 0.5;
+    x.set(mouseX);
+    y.set(mouseY);
+  }
+
+  function onMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
+
+  return (
+    <motion.div
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      style={{ rotateX, rotateY, perspective: 1000 }}
+      className="group relative"
+    >
+      <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-3xl blur opacity-10 group-hover:opacity-30 transition-opacity" />
+      <div className="glass p-8 rounded-3xl border border-white/5 relative z-10 flex items-center gap-6">
+        <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary text-2xl border border-primary/20 shadow-lg group-hover:scale-110 transition-transform duration-500">
+          {icon}
+        </div>
+        <div>
+          <h4 className="text-xs font-mono text-primary uppercase tracking-[0.2em] mb-1">{title}</h4>
+          <p className="text-xl font-bold text-[var(--text-color)]">{content}</p>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  const [errors, setErrors] = useState({});
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-
-    if (!formData.message.trim()) {
-      newErrors.message = 'Message is required';
-    } else if (formData.message.length < 10) {
-      newErrors.message = 'Message should be at least 10 characters';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
-  };
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success' or 'error'
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) return;
-
     setIsSubmitting(true);
+    setSubmitStatus(null);
 
-    // Simulate form submission
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setSubmitSuccess(true);
-      setFormData({ name: '', email: '', message: '' });
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setSubmitSuccess(false);
-      }, 5000);
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        setSubmitStatus('error');
+      }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('Submission Error:', error);
+      setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
+      setTimeout(() => setSubmitStatus(null), 8000);
     }
   };
 
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
   return (
-    <section className="bg-gradient-to-br from-[var(--bg-color)] to-[var(--surface-color)] text-[var(--text-color)] py-24 px-4 relative overflow-hidden" id="contact">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-vibrant rounded-full mix-blend-soft-light filter blur-3xl opacity-10 animate-pulse"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-primary rounded-full mix-blend-soft-light filter blur-3xl opacity-10 animate-pulse animation-delay-2000"></div>
+    <section className="relative min-h-screen py-40 bg-[var(--bg-color)] overflow-hidden" id="contact">
+      {/* Dynamic Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-primary/5 rounded-full blur-[150px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-secondary/5 rounded-full blur-[150px] animate-pulse" />
+        {/* Animated grid overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(var(--text-color-rgb),0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--text-color-rgb),0.02)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(white,transparent_80%)]" />
       </div>
 
-      <div className="container mx-auto max-w-2xl relative z-10">
-        <h2 className="text-4xl font-bold text-center mb-6 text-light font-sans relative inline-block mx-auto">
-          Get in Touch
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-primary to-vibrant rounded-full"></div>
-        </h2>
-        <p className="text-lg text-light-contrast text-center mb-12 font-sans max-w-2xl mx-auto">
-          Have a project in mind or just want to say hello? Fill out the form below and we'll get back to you as soon as possible.
-        </p>
+      <div className="container mx-auto px-6 relative z-10 max-w-7xl">
+        <div className="grid lg:grid-cols-12 gap-16 lg:gap-24 items-center">
 
-        {submitSuccess && (
-          <div className="mb-6 p-4 bg-gradient-to-r from-vibrant/30 to-primary/30 border border-vibrant/50 rounded-xl text-vibrant text-center animate-fadeIn shadow-lg shadow-vibrant/20">
-            Thank you for your message! We'll get back to you soon.
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="relative">
-            <label htmlFor="name" className="block text-light text-sm font-bold mb-2 font-sans">Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className={`w-full p-4 bg-gradient-to-br from-[var(--surface-color)] to-gray-200 border ${
-                errors.name ? 'border-red-500' : 'border-[var(--vibrant-color)]/50'
-              } rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--vibrant-color)] text-[var(--text-color)] transition-all duration-300 shadow-lg`}
-              placeholder="Your Name"
-            />
-            {errors.name && <p className="mt-1 text-red-400 text-sm">{errors.name}</p>}
-          </div>
-
-          <div className="relative">
-            <label htmlFor="email" className="block text-light text-sm font-bold mb-2 font-sans">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={`w-full p-4 bg-gradient-to-br from-[var(--surface-color)] to-gray-200 border ${
-                errors.email ? 'border-red-500' : 'border-[var(--vibrant-color)]/50'
-              } rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--vibrant-color)] text-[var(--text-color)] transition-all duration-300 shadow-lg`}
-              placeholder="your@example.com"
-            />
-            {errors.email && <p className="mt-1 text-red-400 text-sm">{errors.email}</p>}
-          </div>
-
-          <div className="relative">
-            <label htmlFor="message" className="block text-light text-sm font-bold mb-2 font-sans">Message</label>
-            <textarea
-              id="message"
-              name="message"
-              rows="6"
-              value={formData.message}
-              onChange={handleChange}
-              className={`w-full p-4 bg-gradient-to-br from-[var(--surface-color)] to-gray-200 border ${
-                errors.message ? 'border-red-500' : 'border-[var(--vibrant-color)]/50'
-              } rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--vibrant-color)] text-[var(--text-color)] transition-all duration-300 resize-none shadow-lg`}
-              placeholder="Tell us about your project or inquiry..."
-            ></textarea>
-            {errors.message && <p className="mt-1 text-red-400 text-sm">{errors.message}</p>}
-          </div>
-
-          <div className="text-center pt-4">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`${
-                isSubmitting
-                  ? 'bg-gray-500 cursor-not-allowed'
-                  : 'group relative bg-gradient-to-r from-primary to-vibrant hover:from-vibrant hover:to-accent transform hover:scale-105'
-              } transition-all duration-300 text-white font-bold py-5 px-12 rounded-xl text-lg shadow-xl shadow-[var(--primary-color)]/30 hover:shadow-2xl hover:shadow-[var(--vibrant-color)]/50 font-sans w-full sm:w-auto`}
+          {/* Intro Side */}
+          <div className="lg:col-span-12 xl:col-span-5 space-y-12">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
             >
-              <span className="relative z-10">
-                {isSubmitting ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Sending...
-                  </span>
-                ) : (
-                  'Send Message'
-                )}
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-vibrant to-accent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-xs font-bold uppercase tracking-widest mb-10">
+                <FaShieldAlt className="animate-pulse" /> SECURE UPLINK 102
+              </div>
+              <h2 className="text-6xl lg:text-[7rem] font-black font-display text-[var(--text-color)] tracking-tighter mb-8 leading-[0.85] uppercase">
+                INITIATE<br />
+                <span className="text-gradient">DIALOGUE</span>
+              </h2>
+              <p className="text-2xl text-[var(--text-contrast-color)] font-light leading-relaxed max-w-xl">
+                Bridge the gap between vision and reality. Our neural network is primed to receive your specifications.
+              </p>
+            </motion.div>
+
+            <div className="grid gap-6">
+              {[
+                { icon: <FaMapMarkerAlt />, title: "HQ LOCATION", content: "SILICON VALLEY, CA" },
+                { icon: <FaPhone />, title: "SECURE LINE", content: "+1 (555) 000-TECH" },
+                { icon: <FaEnvelope />, title: "DIRECT ACCESS", content: "yasirraeesit@gmail.com" },
+              ].map((item, index) => (
+                <ContactCard key={index} {...item} />
+              ))}
+            </div>
+
+            <div className="flex items-center gap-6 pt-4">
+              <div className="flex -space-x-3">
+                {[1, 2, 3, 4].map(i => (
+                  <div key={i} className="w-10 h-10 rounded-full border-2 border-[var(--bg-color)] bg-surface flex items-center justify-center overflow-hidden">
+                    <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="team" />
+                  </div>
+                ))}
+              </div>
+              <div className="text-sm font-mono text-[var(--text-contrast-color)]">
+                <span className="text-primary font-bold">12 AGENTS</span> ONLINE NOW
+              </div>
+            </div>
           </div>
-        </form>
+
+          {/* Form Side */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="lg:col-span-12 xl:col-span-7"
+          >
+            <div className="relative group">
+              <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 rounded-[3.5rem] blur-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-700" />
+              <div className="glass p-1 rounded-[3.5rem] relative z-10 overflow-hidden bg-[var(--surface-color)]/50 backdrop-blur-3xl border border-white/10">
+                <div className="p-10 md:p-16 space-y-10">
+                  <div className="flex items-center justify-between border-b border-white/5 pb-8 mb-4">
+                    <div className="space-y-1">
+                      <h3 className="text-2xl font-black text-white uppercase tracking-tighter">New Specifications</h3>
+                      <p className="text-xs font-mono text-[var(--text-contrast-color)]">ENCRYPTION LEVEL: MIL-SPEC</p>
+                    </div>
+                    <FaClock className="text-primary animate-spin-slow" />
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-8">
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div className="space-y-3">
+                        <label className="text-[10px] font-mono text-primary uppercase tracking-[0.3em] pl-4">Identification</label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleChange}
+                          required
+                          placeholder="Your identity..."
+                          className="w-full bg-white/5 border border-white/5 rounded-2xl px-8 py-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-primary/50 focus:bg-white/10 transition-all font-medium"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-[10px] font-mono text-primary uppercase tracking-[0.3em] pl-4">Digital Mail</label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          placeholder="yourname@network.com"
+                          className="w-full bg-white/5 border border-white/5 rounded-2xl px-8 py-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-primary/50 focus:bg-white/10 transition-all font-medium"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-mono text-primary uppercase tracking-[0.3em] pl-4">Mission Brief</label>
+                      <textarea
+                        name="message"
+                        value={formData.message}
+                        onChange={handleChange}
+                        required
+                        rows="5"
+                        placeholder="Detail your requirements..."
+                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-8 py-6 text-white placeholder:text-gray-600 focus:outline-none focus:border-primary/50 focus:bg-white/10 transition-all font-medium resize-none"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full h-20 bg-gradient-to-r from-primary to-secondary text-white font-black uppercase tracking-[0.5em] rounded-2xl shadow-[0_0_50px_rgba(var(--primary-color-rgb),0.3)] hover:shadow-[0_0_80px_rgba(var(--primary-color-rgb),0.5)] transition-all transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-4 group"
+                    >
+                      {isSubmitting ? (
+                        <div className="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+                      ) : (
+                        <>
+                          <span className="text-lg">Transmit Package</span>
+                          <FaPaperPlane className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform" />
+                        </>
+                      )}
+                    </button>
+
+                    {submitStatus === 'success' && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-6 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl text-emerald-400 text-center font-bold flex items-center justify-center gap-3"
+                      >
+                        <FaRocket className="animate-bounce" /> UPLINK ESTABLISHED. MESSAGE TRANSMITTED.
+                      </motion.div>
+                    )}
+
+                    {submitStatus === 'error' && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-6 bg-red-500/10 border border-red-500/30 rounded-2xl text-red-400 text-center font-bold flex items-center justify-center gap-3"
+                      >
+                        UPLINK FAILED. PLEASE VERIFY CONNECTION AND TRY AGAIN.
+                      </motion.div>
+                    )}
+                  </form>
+
+                  <div className="flex items-center justify-center gap-8 pt-4 grayscale opacity-30">
+                    <FaGlobe className="text-2xl" />
+                    <FaShieldAlt className="text-2xl" />
+                    <FaRocket className="text-2xl" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
-      {/* Add CSS for animation delays */}
-      <style jsx>{`
-        .animation-delay-2000 {
-          animation-delay: 2s;
+      <style jsx global>{`
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+          animation: spin-slow 12s linear infinite;
         }
       `}</style>
     </section>

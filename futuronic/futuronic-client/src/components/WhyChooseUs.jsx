@@ -1,20 +1,29 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-const FeatureCard = ({ title, description, icon }) => (
-  <div className="bg-gradient-to-br from-dark-surface to-dark p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 flex flex-col items-center text-center border border-primary/20 transform hover:-translate-y-3 relative overflow-hidden group">
-    {/* Animated background element */}
-    <div className="absolute -right-10 -top-10 w-24 h-24 rounded-full opacity-10 bg-vibrant group-hover:animate-spin-slow"></div>
+const FeatureCard = ({ title, description, icon }) => {
+  const themeMode = useSelector((state) => state.theme.mode);
 
-    <div className="text-vibrant text-5xl mb-6 relative z-10">
-      {icon}
+  const cardClass = themeMode === 'dark' 
+    ? "bg-gradient-to-br from-gray-900 to-black p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 flex flex-col items-center text-center border border-primary/20 transform hover:-translate-y-3 relative overflow-hidden group"
+    : "bg-gradient-to-br from-white to-gray-100 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 flex flex-col items-center text-center border border-primary/20 transform hover:-translate-y-3 relative overflow-hidden group";
+
+  return (
+    <div className={cardClass}>
+      {/* Animated background element */}
+      <div className="absolute -right-10 -top-10 w-24 h-24 rounded-full opacity-10 bg-vibrant group-hover:animate-spin-slow"></div>
+
+      <div className="text-vibrant text-5xl mb-6 relative z-10">
+        {icon}
+      </div>
+      <h3 className="text-2xl font-bold text-[var(--text-color)] mb-4 font-sans relative z-10">{title}</h3>
+      <p className="text-[var(--text-contrast-color)] leading-relaxed font-sans relative z-10">{description}</p>
+
+      {/* Animated border effect */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-vibrant opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
     </div>
-    <h3 className="text-2xl font-bold text-light mb-4 font-sans relative z-10">{title}</h3>
-    <p className="text-light-contrast leading-relaxed font-sans relative z-10">{description}</p>
-
-    {/* Animated border effect */}
-    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-vibrant opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-  </div>
-);
+  );
+};
 
 const WhyChooseUs = () => {
   const features = [
@@ -50,11 +59,11 @@ const WhyChooseUs = () => {
   return (
     <section className="bg-gradient-to-b from-[var(--bg-color)] to-[var(--surface-color)] text-[var(--text-color)] py-24 px-4" id="why-choose-us">
       <div className="container mx-auto max-w-6xl">
-        <h2 className="text-4xl font-bold text-center mb-6 text-light font-sans relative inline-block mx-auto">
+        <h2 className="text-4xl font-bold text-center mb-6 text-[var(--text-color)] font-sans relative inline-block mx-auto">
           Why Choose Futuronic?
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-40 h-1 bg-gradient-to-r from-primary to-vibrant rounded-full"></div>
         </h2>
-        <p className="text-lg text-light-contrast text-center mb-16 font-sans max-w-2xl mx-auto">
+        <p className="text-lg text-[var(--text-contrast-color)] text-center mb-16 font-sans max-w-2xl mx-auto">
           Discover what sets us apart in the world of AI and automation
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
